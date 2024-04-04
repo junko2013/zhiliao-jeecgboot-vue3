@@ -16,7 +16,6 @@
           <Icon icon="mdi:chevron-down"></Icon>
         </a-button>
       </a-dropdown>
-      <div style="margin-left: 10px;margin-top: 5px">当前登录租户: <span class="tenant-name">{{loginTenantName}}</span> </div>
     </template>
     <template #action="{ record }">
       <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
@@ -24,8 +23,10 @@
   </BasicTable>
   <!--角色用户表格-->
   <RoleUserTable @register="roleUserDrawer" :disableUserEdit="true"/>
-  <!--角色编辑抽屉-->
-  <RoleDrawer @register="registerDrawer" @success="reload" :showFooter="showFooter" />
+  <!--租户角色编辑抽屉-->
+  <TenantRoleDrawer @register="registerDrawer" @success="reload" :showFooter="showFooter" />
+  <!--角色菜单授权抽屉-->
+  <RolePermissionDrawer @register="rolePermissionDrawer" />
   <!--角色详情-->
   <RoleDesc @register="registerDesc"></RoleDesc>
 </template>
@@ -35,20 +36,23 @@
   import { useDrawer } from '/@/components/Drawer';
   import { useModal } from '/@/components/Modal';
   import RoleDesc from './components/RoleDesc.vue';
-  import RoleDrawer from './components/RoleDrawer.vue';
+  import TenantRoleDrawer from '../tenant/components/TenantRoleDrawer.vue';
   import RoleUserTable from './components/RoleUserTable.vue';
-  import { columns, searchFormSchema } from './role.data';
+  import { columns, searchFormSchema } from './roleTenant.data';
   import { listByTenant, deleteRole, batchDeleteRole, getExportUrl, getImportUrl } from './role.api';
   import { useListPage } from '/@/hooks/system/useListPage';
   import { getLoginTenantName } from "/@/views/system/tenant/tenant.api";
   import { tenantSaasMessage } from "@/utils/common/compUtils";
-  
+  import RolePermissionDrawer from "@/views/system/role/components/RolePermissionDrawer.vue";
+
   const showFooter = ref(true);
   const [roleUserDrawer, { openDrawer: openRoleUserDrawer }] = useDrawer();
   const [registerDrawer, { openDrawer }] = useDrawer();
   const [registerModal, { openModal }] = useModal();
   const [registerDesc, { openDrawer: openRoleDesc }] = useDrawer();
-  
+  const [rolePermissionDrawer, { openDrawer: openRolePermissionDrawer }] = useDrawer();
+
+
   // 列表页面公共参数、方法
   const { prefixCls, tableContext, onImportXls, onExportXls } = useListPage({
     designScope: 'role-template',
@@ -128,6 +132,12 @@
     openRoleUserDrawer(true, record);
   }
   /**
+   * 角色授权弹窗
+   */
+  function handlePerssion(record) {
+    openRolePermissionDrawer(true, { roleId: record.id });
+  }
+  /**
    * 操作栏
    */
   function getTableAction(record) {
@@ -135,6 +145,10 @@
       {
         label: '用户',
         onClick: handleUser.bind(null, record),
+      },
+      {
+        label: '授权',
+        onClick: handlePerssion.bind(null, record),
       },
     ];
   }
@@ -160,14 +174,6 @@
         },
       },
     ];
-  }
-
-  const loginTenantName = ref<string>('');
-  
-  getTenantName();
-  
-  async function getTenantName(){
-    loginTenantName.value = await getLoginTenantName();
   }
 
   onMounted(()=>{

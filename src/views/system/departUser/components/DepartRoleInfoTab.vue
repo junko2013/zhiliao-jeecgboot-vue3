@@ -138,6 +138,7 @@
 
   // 授权部门角色
   function permissionDepartRole(record) {
+    console.log(record)
     authDrawer.openDrawer(true, { record });
   }
 

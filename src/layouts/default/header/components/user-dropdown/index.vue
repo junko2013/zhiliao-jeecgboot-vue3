@@ -11,19 +11,14 @@
 
     <template #overlay>
       <Menu @click="handleMenuClick">
-        <MenuItem key="doc" :text="t('layout.header.dropdownItemDoc')" icon="ion:document-text-outline" v-if="getShowDoc" />
-        <MenuDivider v-if="getShowDoc" />
-        <MenuItem key="account" :text="t('layout.header.dropdownItemSwitchAccount')" icon="ant-design:setting-outlined" />
-        <MenuItem key="password" :text="t('layout.header.dropdownItemSwitchPassword')" icon="ant-design:edit-outlined" />
-        <MenuItem key="depart" :text="t('layout.header.dropdownItemSwitchDepart')" icon="ant-design:cluster-outlined" />
-        <MenuItem key="cache" :text="t('layout.header.dropdownItemRefreshCache')" icon="ion:sync-outline" />
-        <!-- <MenuItem
-            v-if="getUseLockPage"
-            key="lock"
-            :text="t('layout.header.tooltipLock')"
-            icon="ion:lock-closed-outline"
-        />-->
-        <MenuItem key="logout" :text="t('layout.header.dropdownItemLoginOut')" icon="ion:power-outline" />
+        <MenuItem action="account" :text="t('layout.header.dropdownItemSwitchAccount')" icon="ant-design:setting-outlined" />
+        <MenuItem action="password" :text="t('layout.header.dropdownItemSwitchPassword')" icon="ant-design:edit-outlined" />
+        <MenuItem action="depart" :text="t('layout.header.dropdownItemSwitchDepart')" icon="ant-design:cluster-outlined" />
+        <MenuItem action="sysCache" :text="t('layout.header.dropdownItemRefreshSysCache')" icon="ion:sync-outline" />
+        <MenuItem action="appCache" :text="t('layout.header.dropdownItemRefreshAppCache')" icon="ion:sync-outline" />
+        <MenuItem v-if="getUseLockPage" action="lock" :text="t('layout.header.tooltipLock')" icon="ion:lock-closed-outline" />
+        <MenuDivider/>
+        <MenuItem action="logout" :text="t('layout.header.dropdownItemLoginOut')" icon="ion:power-outline" />
       </Menu>
     </template>
   </Dropdown>
@@ -58,7 +53,7 @@
   import { getFileAccessHttpUrl } from '/@/utils/common/compUtils';
   import { getRefPromise } from '/@/utils/index';
 
-  type MenuEvent = 'logout' | 'doc' | 'lock' | 'cache' | 'depart';
+  type MenuEvent = 'logout' | 'doc' | 'lock' | 'sysCache' |'appCache' | 'depart'|'password'|'account';
   const { createMessage } = useMessage();
   export default defineComponent({
     name: 'UserDropdown',
@@ -103,12 +98,11 @@
        * 多部门弹窗逻辑
        */
       const loginSelectRef = ref();
-      // update-begin--author:liaozhiyang---date:20230901---for：【QQYUN-6333】空路由问题—首次访问资源太大
       async function handleLock() {
+        lockActionVisible.value = true;
         await getRefPromise(lockActionRef);
         openModal(true);
       }
-      // update-end--author:liaozhiyang---date:20230901---for：【QQYUN-6333】空路由问题—首次访问资源太大
       //  login out
       function handleLoginOut() {
         userStore.confirmLoginOut();
@@ -119,20 +113,25 @@
         openWindow(SITE_URL);
       }
 
-      // 清除缓存
-      async function clearCache() {
-        const result = await refreshCache();
+      // 清除系统缓存
+      async function clearSysCache() {
+        const result = await refreshCache({"isSystem":1});
         if (result.success) {
           const res = await queryAllDictItems();
           removeAuthCache(DB_DICT_DATA_KEY);
           setAuthCache(DB_DICT_DATA_KEY, res.result);
-          // update-begin--author:liaozhiyang---date:20240124---for：【QQYUN-7970】国际化
           createMessage.success(t('layout.header.refreshCacheComplete'));
-          // update-end--author:liaozhiyang---date:20240124---for：【QQYUN-7970】国际化
         } else {
-          // update-begin--author:liaozhiyang---date:20240124---for：【QQYUN-7970】国际化
           createMessage.error(t('layout.header.refreshCacheFailure'));
-          // update-end--author:liaozhiyang---date:20240124---for：【QQYUN-7970】国际化
+        }
+      }
+      // 清除应用缓存
+      async function clearAppCache() {
+        const result = await refreshCache({"isSystem":0});
+        if (result.success) {
+          createMessage.success(t('layout.header.refreshCacheComplete'));
+        }else{
+          createMessage.error(t('layout.header.refreshCacheFailure'));
         }
       }
       // 切换部门
@@ -141,13 +140,11 @@
       }
       // 修改密码
       const updatePasswordRef = ref();
-      // update-begin--author:liaozhiyang---date:20230901---for：【QQYUN-6333】空路由问题—首次访问资源太大
       async function updatePassword() {
         passwordVisible.value = true;
         await getRefPromise(updatePasswordRef);
         updatePasswordRef.value.show(userStore.getUserInfo.username);
       }
-      // update-end--author:liaozhiyang---date:20230901---for：【QQYUN-6333】空路由问题—首次访问资源太大
       function handleMenuClick(e: { key: MenuEvent }) {
         switch (e.key) {
           case 'logout':
@@ -159,8 +156,11 @@
           case 'lock':
             handleLock();
             break;
-          case 'cache':
-            clearCache();
+          case 'sysCache':
+            clearSysCache();
+            break;
+          case 'appCache':
+            clearAppCache();
             break;
           case 'depart':
             updateCurrentDepart();
@@ -169,9 +169,7 @@
             updatePassword();
             break;
           case 'account':
-            //update-begin---author:wangshuai ---date:20221125  for：进入用户设置页面------------
             go(`/system/usersetting`);
-            //update-end---author:wangshuai ---date:20221125  for：进入用户设置页面--------------
             break;
         }
       }
@@ -189,6 +187,7 @@
         updatePasswordRef,
         passwordVisible,
         lockActionVisible,
+        lockActionRef
       };
     },
   });

@@ -5,6 +5,7 @@ import { Icon } from '/@/components/Icon';
 import { duplicateCheck } from '../user/user.api';
 import { ajaxGetDictItems ,checkPermDuplication } from './menu.api';
 import { render } from '/@/utils/common/renderUtils';
+import { Tag } from 'ant-design-vue';
 
 const isDir = (type) => type === 0;
 const isMenu = (type) => type === 1;
@@ -29,6 +30,26 @@ export const columns: BasicColumn[] = [
     width: 150,
     customRender: ({ text }) => {
       return render.renderDict(text, 'menu_type');
+    },
+  },
+  {
+    title: '租户可授权',
+    dataIndex: 'canGrantToTenant',
+    width: 150,
+    customRender: ({ text }) => {
+      return h(Tag, {
+        color: text ? 'green' : 'red',
+      }, () => text ? '√' : '×');
+    },
+  },
+  {
+    title: '需要服务器',
+    dataIndex: 'needServer',
+    width: 150,
+    customRender: ({ text }) => {
+      return h(Tag, {
+        color: text ? 'green' : 'red',
+      }, () => text ? '√' : '×');
     },
   },
   {
@@ -328,6 +349,26 @@ export const formSchema: FormSchema[] = [
       unCheckedChildren: '内部',
     },
     ifShow: ({ values }) => !isButton(values.menuType),
+  },
+  {
+    field: 'canGrantToTenant',
+    label: '租户可授权',
+    component: 'Switch',
+    defaultValue: false,
+    componentProps: {
+      checkedChildren: '是',
+      unCheckedChildren: '否',
+    },
+  },
+  {
+    field: 'needServer',
+    label: '需要服务器',
+    component: 'Switch',
+    defaultValue: false,
+    componentProps: {
+      checkedChildren: '是',
+      unCheckedChildren: '否',
+    },
   },
 ];
 

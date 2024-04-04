@@ -5,10 +5,11 @@ export default {
     dropdownItemDoc: 'Document',
     dropdownItemLoginOut: 'Login Out',
     dropdownItemSwitchPassword: 'Password Change',
-    dropdownItemSwitchDepart: 'Switch Department',
-    dropdownItemRefreshCache: 'Clean cache',
+    dropdownItemSwitchDepart: 'Switch Tenant/Department',
+    dropdownItemRefreshSysCache: 'Clean System cache',
+    dropdownItemRefreshAppCache: 'Clean App cache',
     dropdownItemSwitchAccount: 'Account Setting',
-    
+
     tooltipErrorLog: 'Error log',
     tooltipLock: 'Lock screen',
     tooltipNotify: 'Notification',
@@ -23,6 +24,7 @@ export default {
 
     home: 'Home',
     welcomeIn: 'Welcome in',
+    currentTenant: 'Current Tenant',
     refreshCacheComplete: 'Refresh cache complete',
     refreshCacheFailure: 'Refresh cache failure',
   },

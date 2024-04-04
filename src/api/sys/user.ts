@@ -12,6 +12,7 @@ import { PageEnum } from '/@/enums/pageEnum';
 const { createErrorModal } = useMessage();
 enum Api {
   Login = '/sys/login',
+  unlockScreen = '/sys/unlockScreen',
   phoneLogin = '/sys/phoneLogin',
   Logout = '/sys/logout',
   GetUserInfo = '/sys/user/getUserInfo',
@@ -51,6 +52,23 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
   return defHttp.post<LoginResultModel>(
     {
       url: Api.Login,
+      params,
+    },
+    {
+      errorMessageMode: mode,
+    }
+  );
+}
+
+/**
+ * 解锁屏幕
+ * @param params
+ * @param mode
+ */
+export function unlockScreenApi(params: LoginParams, mode: ErrorMessageMode = 'modal') {
+  return defHttp.post<LoginResultModel>(
+    {
+      url: Api.unlockScreen,
       params,
     },
     {

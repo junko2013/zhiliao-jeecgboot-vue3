@@ -31,9 +31,11 @@
   import DepartBaseInfoTab from './components/DepartBaseInfoTab.vue';
   import DepartUserInfoTab from './components/DepartUserInfoTab.vue';
   import DepartRoleInfoTab from './components/DepartRoleInfoTab.vue';
+  import { useUserStore } from "@/store/modules/user";
 
   const { prefixCls } = useDesign('depart-user');
   provide('prefixCls', prefixCls);
+
 
   // 当前选中的部门信息
   let departData = ref({});

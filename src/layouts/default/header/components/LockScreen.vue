@@ -5,14 +5,14 @@
   <LockModal ref="modalRef" v-if="lockModalVisible" @register="register" />
 </template>
 <script lang="ts">
-  import { defineComponent, computed, ref } from 'vue';
+  import { defineComponent, ref } from 'vue';
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
   import { Tooltip } from 'ant-design-vue';
   import { LockOutlined } from '@ant-design/icons-vue';
   import Icon from '/@/components/Icon';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useModal } from '/@/components/Modal';
-  import { getRefPromise } from '/@/utils/index';
+  import { getRefPromise } from "@/utils";
 
   export default defineComponent({
     name: 'LockScreen',

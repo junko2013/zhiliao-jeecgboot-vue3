@@ -5,6 +5,8 @@ import { defineStore } from 'pinia';
 import { LOCK_INFO_KEY } from '/@/enums/cacheEnum';
 import { Persistent } from '/@/utils/cache/persistent';
 import { useUserStore } from './user';
+import {useCrypto} from '/@/utils/encryption/aesEncrypt';
+const { encrypt } = useCrypto();
 
 interface LockState {
   lockInfo: Nullable<LockInfo>;
@@ -39,9 +41,9 @@ export const useLockStore = defineStore({
       const tryLogin = async () => {
         try {
           const username = userStore.getUserInfo?.username;
-          const res = await userStore.login({
+          const res = await userStore.unlockScreen({
             username,
-            password: password!,
+            password: encrypt(password!),
             goHome: false,
             mode: 'none',
           });

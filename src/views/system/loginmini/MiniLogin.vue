@@ -18,7 +18,7 @@
           <div class="aui-form">
             <div class="aui-image">
               <div class="aui-image-text">
-                <img :src="adTextImg" />
+<!--                <img :src="adTextImg" />-->
               </div>
             </div>
             <div class="aui-formBox">
@@ -159,14 +159,15 @@
   import MiniForgotpad from './MiniForgotpad.vue';
   import MiniRegister from './MiniRegister.vue';
   import MiniCodelogin from './MiniCodelogin.vue';
-  import logoImg from '/@/assets/loginmini/icon/jeecg_logo.png';
+  import logoImg from '/@/assets/loginmini/icon/logo_large.png';
   import adTextImg from '/@/assets/loginmini/icon/jeecg_ad_text.png';
   import { AppLocalePicker, AppDarkModeToggle } from '/@/components/Application';
   import { useLocaleStore } from '/@/store/modules/locale';
   import { useDesign } from "/@/hooks/web/useDesign";
   import { useAppInject } from "/@/hooks/web/useAppInject";
   import { GithubFilled, WechatFilled, DingtalkCircleFilled, createFromIconfontCN } from '@ant-design/icons-vue';
-
+  import {useCrypto} from '/@/utils/encryption/aesEncrypt';
+  const { encrypt } = useCrypto();
   const IconFont = createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/font_2316098_umqusozousr.js',
   });
@@ -265,7 +266,7 @@
       loginLoading.value = true;
       const { userInfo } = await userStore.login(
         toRaw({
-          password: formData.password,
+          password: encrypt(formData.password),
           username: formData.username,
           captcha: formData.inputCode,
           checkKey: randCodeData.checkKey,
@@ -549,7 +550,7 @@ html[data-theme='dark'] {
     -webkit-text-fill-color: #c9d1d9 !important;
     box-shadow: inherit !important;
   }
-  
+
   .ant-divider-inner-text {
     font-size: 12px !important;
     color: @text-color-secondary !important;

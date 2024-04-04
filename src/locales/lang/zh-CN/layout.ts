@@ -5,8 +5,9 @@ export default {
     dropdownItemDoc: '官网',
     dropdownItemLoginOut: '退出系统',
     dropdownItemSwitchPassword: '密码修改',
-    dropdownItemSwitchDepart: '切换部门',
-    dropdownItemRefreshCache: '刷新缓存',
+    dropdownItemSwitchDepart: '切换租户/部门',
+    dropdownItemRefreshSysCache: '清除系统缓存',
+    dropdownItemRefreshAppCache: '清除应用缓存',
     dropdownItemSwitchAccount: '账户设置',
 
     // tooltip
@@ -24,6 +25,7 @@ export default {
 
     home: '首页',
     welcomeIn:"欢迎进入",
+    currentTenant:"当前租户",
     refreshCacheComplete: "刷新缓存完成！",
     refreshCacheFailure: "刷新缓存失败！",
   },

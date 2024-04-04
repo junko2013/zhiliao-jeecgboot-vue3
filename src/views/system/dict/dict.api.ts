@@ -17,7 +17,7 @@ enum Api {
   itemSave = '/sys/dictItem/add',
   itemEdit = '/sys/dictItem/edit',
   dictItemCheck = '/sys/dictItem/dictItemCheck',
-  refreshCache = '/sys/dict/refleshCache',
+  refreshCache = '/sys/dict/refreshCache',
   queryAllDictItems = '/sys/dict/queryAllDictItems',
 }
 /**
@@ -127,7 +127,7 @@ export const dictItemCheck = (params) => defHttp.get({ url: Api.dictItemCheck, p
  * 刷新字典
  * @param params
  */
-export const refreshCache = () => defHttp.get({ url: Api.refreshCache }, { isTransformResponse: false });
+export const refreshCache = (params) => defHttp.get({ url: Api.refreshCache ,params}, { isTransformResponse: false });
 /**
  * 获取所有字典项
  * @param params

@@ -1,5 +1,5 @@
 <template>
-  <BasicDrawer @register="registerDrawer" :title="title" :width="580" destroyOnClose @ok="handleSubmit">
+  <BasicDrawer @register="registerDrawer" :showFooter="true" :title="title" :width="580" destroyOnClose @ok="handleSubmit">
     <BasicForm @register="registerForm" />
   </BasicDrawer>
 </template>
@@ -11,6 +11,7 @@
   import { getUserDepartList } from '../../user/user.api';
   import { tenantUserSchema } from '../tenant.data';
   import { saveOrUpdateTenantUser } from '../tenant.api';
+  import { getTenantId } from "@/utils/auth";
 
   export default defineComponent({
     name: 'TenantUserDrawer',
@@ -71,6 +72,7 @@
           data.username = data.phone;
         }
         data.password = '123456';
+        data.relTenantIds = getTenantId();
         confirmLoading.value = true;
         await saveOrUpdateTenantUser(data, isUpdate.value);
         confirmLoading.value = false;

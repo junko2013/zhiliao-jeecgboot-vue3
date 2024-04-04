@@ -7,7 +7,7 @@ import { PageEnum } from '/@/enums/pageEnum';
 import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY, LOGIN_INFO_KEY, DB_DICT_DATA_KEY, TENANT_ID, OAUTH2_THIRD_LOGIN_TENANT_ID } from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache, removeAuthCache } from '/@/utils/auth';
 import { GetUserInfoModel, LoginParams, ThirdLoginParams } from '/@/api/sys/model/userModel';
-import { doLogout, getUserInfo, loginApi, phoneLoginApi, thirdLogin } from '/@/api/sys/user';
+import { doLogout, getUserInfo, loginApi,unlockScreenApi, phoneLoginApi, thirdLogin } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
@@ -161,6 +161,27 @@ export const useUserStore = defineStore({
       }
     },
     /**
+     * 解锁屏幕
+     */
+    async unlockScreen(
+      params: LoginParams & {
+        goHome?: boolean;
+        mode?: ErrorMessageMode;
+      }
+    ): Promise<GetUserInfoModel | null> {
+      try {
+        const { goHome = true, mode, ...loginParams } = params;
+        const data = await unlockScreenApi(loginParams, mode);
+        const { token, userInfo } = data;
+        // save token
+        this.setToken(token);
+        this.setTenant(userInfo.loginTenantId);
+        return this.afterLoginAction(goHome, data);
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
+    /**
      * 扫码登录事件
      */
     async qrCodeLogin(token): Promise<GetUserInfoModel | null> {
@@ -196,7 +217,7 @@ export const useUserStore = defineStore({
         //   permissionStore.setDynamicAddedRoute(true);
         // }
         //update-end---author:scott ---date::2024-02-21  for：【QQYUN-8326】登录不需要构建路由，进入首页有构建---
-        
+
         await this.setLoginInfo({ ...data, isLogin: true });
         //update-begin-author:liusq date:2022-5-5 for:登录成功后缓存拖拽模块的接口前缀
         localStorage.setItem(JDragConfigEnum.DRAG_BASE_URL, useGlobSetting().domainUrl);

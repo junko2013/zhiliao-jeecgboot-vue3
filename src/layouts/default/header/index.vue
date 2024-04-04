@@ -10,8 +10,10 @@
         :sider="false"
       />
       <LayoutBreadcrumb v-if="getShowContent && getShowBread" :theme="getHeaderTheme" />
-      <!-- 欢迎语 -->
-      <span v-if="getShowContent && getShowBreadTitle && !getIsMobile" :class="[prefixCls, `${prefixCls}--${getHeaderTheme}`,'headerIntroductionClass']"> {{t('layout.header.welcomeIn')}} {{ title }} </span>
+      <!-- 当前租户 -->
+      <span v-if="getShowContent && getShowBreadTitle && !getIsMobile" :class="[prefixCls, `${prefixCls}--${getHeaderTheme}`,'headerIntroductionClass']">
+        {{t('layout.header.currentTenant')}} <b>[{{ loginTenantName }}]</b>
+      </span>
     </div>
     <!-- left end -->
 
@@ -75,6 +77,7 @@
   import { useUserStore } from '/@/store/modules/user';
   import { useI18n } from '/@/hooks/web/useI18n';
   import Aide from "@/views/dashboard/ai/components/aide/index.vue"
+  import { getLoginTenantName } from "@/views/system/tenant/tenant.api";
   const { t } = useI18n();
 
   export default defineComponent({
@@ -184,6 +187,14 @@
         console.log('成功。。。。。');
       }
 
+      const loginTenantName = ref<string>('');
+
+      getTenantName();
+
+      async function getTenantName(){
+        loginTenantName.value = await getLoginTenantName();
+      }
+
       onMounted(() => {
         showLoginSelect();
       });
@@ -215,6 +226,7 @@
         loginSelectOk,
         loginSelectRef,
         title,
+        loginTenantName,
         t
       };
     },
@@ -225,20 +237,20 @@
   //update-begin---author:scott ---date:2022-09-30  for：默认隐藏顶部菜单面包屑-----------
   //顶部欢迎语展示样式
   @prefix-cls: ~'@{namespace}-layout-header';
-  
+
   .ant-layout .@{prefix-cls} {
     display: flex;
     padding: 0 8px;
     height: 48px;
     align-items: center;
-    
+
     .headerIntroductionClass {
       margin-right: 4px;
       margin-bottom: 2px;
       border-bottom: 0px;
       border-left: 0px;
     }
-    
+
     &--light {
       .headerIntroductionClass {
         color: @breadcrumb-item-normal-color;

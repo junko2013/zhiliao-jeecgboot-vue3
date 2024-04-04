@@ -3,6 +3,8 @@ import { FormSchema } from '/@/components/Table';
 import { getAllRolesListNoByTenant, getAllTenantList } from './user.api';
 import { rules } from '/@/utils/helper/validator';
 import { render } from '/@/utils/common/renderUtils';
+import { h } from 'vue';
+import QRCodeVue3 from "qrcode-vue3";
 export const columns: BasicColumn[] = [
   {
     title: '用户账号',
@@ -19,6 +21,25 @@ export const columns: BasicColumn[] = [
     dataIndex: 'avatar',
     width: 120,
     customRender: render.renderAvatar,
+  },
+  {
+    title: '谷歌密钥',
+    dataIndex: 'googleCode',
+    width: 120,
+    customRender: ({record})=>{
+      return h('div', {}, [
+        !record.googleCode ? '未启用' : '',
+        record.googleCode ? h('div', {}, [
+          h(QRCodeVue3, {
+            value: `otpauth://totp/${record.nickname}@zhiliaoim?secret=${record.googleCode}`,
+            width: 80,
+            height: 80,
+          }),
+          h('br'),
+          record.googleCode
+        ]) : ''
+      ]);
+    },
   },
   {
     title: '性别',
@@ -228,7 +249,7 @@ export const formSchema: FormSchema[] = [
     field: 'relTenantIds',
     component: 'ApiSelect',
     componentProps: {
-      mode: 'multiple',
+      mode: 'single',
       api: getAllTenantList,
       numberToString: true,
       labelField: 'name',
@@ -323,6 +344,14 @@ export const formSchema: FormSchema[] = [
       type: 'radio',
       stringToNumber: true,
     },
+  },
+  {
+    label: '谷歌密钥',
+    field: 'googleCode',
+    component: "GoogleCodeFormItem",
+    componentProps:{
+      googleCode:""
+    }
   },
 ];
 

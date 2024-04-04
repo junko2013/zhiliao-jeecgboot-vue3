@@ -14,6 +14,8 @@ enum Api {
   getDictItems = '/sys/dict/getDictItems/',
   getTableList = '/sys/user/queryUserComponentData',
   getCategoryData = '/sys/category/loadAllData',
+  getGoogleCode = '/sys/common/generateGoogleCode',
+
 }
 
 /**
@@ -71,6 +73,13 @@ export const loadTreeData = (params?) => {
 export const loadDictItem = (params?) => {
   return defHttp.get({ url: Api.loadDictItem, params });
 };
+
+/**
+ * 获取谷歌密钥
+ */
+export function getGoogleCode() {
+  return defHttp.get({ url: Api.getGoogleCode });
+}
 
 /**
  * 根据字典code加载字典text

@@ -7,7 +7,6 @@
         <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate"> 新增</a-button>
         <JThirdAppButton biz-type="user" :selected-row-keys="selectedRowKeys" syncToApp syncToLocal @sync-finally="onSyncFinally" />
         <a-button type="primary" @click="openQuitModal(true, {})" preIcon="ant-design:user-delete-outlined">离职信息</a-button>
-        <div style="margin-left: 10px;margin-top: 5px"> 当前登录租户: <span class="tenant-name">{{loginTenantName}}</span> </div>
       </template>
       <!--操作栏-->
       <template #action="{ record }">
@@ -229,7 +228,7 @@
   //离职代理人model
   const [registerUserModal, { openModal: openUserModal }] = useModal();
   const handOverUserName = ref<string>('');
-  
+
   /**
    * 人员交接
    */
@@ -265,18 +264,6 @@
       })
     }
   }
-  //============================================  租户离职交接  ============================================
-
-
-  //update-begin---author:wangshuai ---date:20230710  for：【QQYUN-5723】4、显示当前登录租户------------
-  const loginTenantName = ref<string>('');
-
-  getTenantName();
-
-  async function getTenantName(){
-    loginTenantName.value = await getLoginTenantName();
-  }
-  //update-end---author:wangshuai ---date:20230710  for：【QQYUN-5723】4、显示当前登录租户------------
 
   /**
    * 离职成功之后需要判断一下是否为当前用户，当前用户需要刷新浏览器
@@ -292,7 +279,7 @@
       reload();
     }
   }
-  
+
   onMounted(()=>{
     tenantSaasMessage('租户用户')
   })

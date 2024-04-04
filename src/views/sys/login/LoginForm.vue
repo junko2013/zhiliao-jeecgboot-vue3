@@ -100,6 +100,8 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   import { getCodeInfo } from '/@/api/sys/user';
   //import { onKeyStroke } from '@vueuse/core';
+  import {useCrypto} from '/@/utils/encryption/aesEncrypt';
+  const { encrypt } = useCrypto();
 
   const ACol = Col;
   const ARow = Row;
@@ -145,7 +147,7 @@
       loading.value = true;
       const { userInfo } = await userStore.login(
         toRaw({
-          password: data.password,
+          password: encrypt(data.password),
           username: data.account,
           captcha: data.inputCode,
           checkKey: randCodeData.checkKey,

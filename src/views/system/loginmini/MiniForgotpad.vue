@@ -4,7 +4,7 @@
       <div class="aui-form">
         <div class="aui-image">
           <div class="aui-image-text">
-            <img :src="adTextImg" alt="" />
+<!--            <img :src="adTextImg" alt="" />-->
           </div>
         </div>
         <div class="aui-formBox">
@@ -96,7 +96,7 @@
   import { SmsEnum, useFormRules, useFormValid, useLoginState } from '/@/views/sys/login/useLogin';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { getCaptcha, passwordChange, phoneVerify } from '/@/api/sys/user';
-  import logoImg from '/@/assets/loginmini/icon/jeecg_logo.png'
+  import logoImg from '/@/assets/loginmini/icon/logo_large.png'
   import adTextImg from '/@/assets/loginmini/icon/jeecg_ad_text.png'
   import successImg from '/@/assets/loginmini/icon/icon-success.png'
 

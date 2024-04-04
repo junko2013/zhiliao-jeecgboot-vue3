@@ -1,8 +1,13 @@
 import { Ref } from 'vue';
-import { duplicateCheckDelay } from '/@/views/system/user/user.api';
+import {
+  duplicateCheckDelay,
+  getUserDepartList,
+} from "/@/views/system/user/user.api";
 import { BasicColumn, FormSchema } from '/@/components/Table';
 import { DescItem } from '/@/components/Description';
 import { findTree } from '/@/utils/common/compUtils';
+import { useUserStore } from "@/store/modules/user";
+const userStore = useUserStore();
 
 // 用户信息 columns
 export const userInfoColumns: BasicColumn[] = [
@@ -127,6 +132,26 @@ export const departRoleModalFormSchema: FormSchema[] = [
         },
       ];
     },
+  },
+  {
+    field: 'departId',
+    valueField: 'departId_dictText',
+    label: '部门',
+    component: 'ApiSelect',
+    componentProps: {
+      mode: 'single',
+      api: () => getUserDepartList({userId:userStore.getUserInfo?.id}),
+      numberToString: true,
+      labelField: 'title',
+      valueField: 'id',
+      immediate: false,
+    },
+    dynamicDisabled: ({ values }) => {
+      return !!values.id;
+    },
+    rules: [
+      { required: true, message: '所属部门不能为空！' },
+    ],
   },
   {
     field: 'description',
