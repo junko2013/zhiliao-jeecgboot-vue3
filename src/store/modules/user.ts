@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 import { store } from '/@/store';
 import { RoleEnum } from '/@/enums/roleEnum';
 import { PageEnum } from '/@/enums/pageEnum';
-import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY, LOGIN_INFO_KEY, DB_DICT_DATA_KEY, TENANT_ID, OAUTH2_THIRD_LOGIN_TENANT_ID } from '/@/enums/cacheEnum';
+import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY, LOGIN_INFO_KEY, DB_DICT_DATA_KEY, TENANT_ID,SERVER_ID, OAUTH2_THIRD_LOGIN_TENANT_ID } from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache, removeAuthCache } from '/@/utils/auth';
 import { GetUserInfoModel, LoginParams, ThirdLoginParams } from '/@/api/sys/model/userModel';
 import { doLogout, getUserInfo, loginApi,unlockScreenApi, phoneLoginApi, thirdLogin } from '/@/api/sys/user';
@@ -30,6 +30,7 @@ interface UserState {
   sessionTimeout?: boolean;
   lastUpdateTime: number;
   tenantid?: string | number;
+  serverId?: string | number;
   shareTenantId?: Nullable<string | number>;
   loginInfo?: Nullable<LoginInfo>;
 }
@@ -51,6 +52,8 @@ export const useUserStore = defineStore({
     lastUpdateTime: 0,
     //租户id
     tenantid: '',
+    //服务器id
+    serverId: '',
     // 分享租户ID
     // 用于分享页面所属租户与当前用户登录租户不一致的情况
     shareTenantId: null,
@@ -84,6 +87,9 @@ export const useUserStore = defineStore({
     },
     getTenant(): string | number {
       return this.tenantid || getAuthCache<string | number>(TENANT_ID);
+    },
+    getServer(): string | number {
+      return this.serverId || getAuthCache<string | number>(SERVER_ID);
     },
     // 是否有分享租户id
     hasShareTenantId(): boolean {
@@ -125,6 +131,10 @@ export const useUserStore = defineStore({
     setTenant(id) {
       this.tenantid = id;
       setAuthCache(TENANT_ID, id);
+    },
+    setServer(id) {
+      this.serverId = id;
+      setAuthCache(SERVER_ID, id);
     },
     setShareTenantId(id: NonNullable<typeof this.shareTenantId>) {
       this.shareTenantId = id;

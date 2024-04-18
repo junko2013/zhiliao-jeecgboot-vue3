@@ -130,6 +130,7 @@ export type ComponentType =
   | 'JPopup'
   | 'JPopupDict'
   | 'JSwitch'
+  | 'ZlSwitch'
   | 'JEasyCron'
   | 'JTreeDict'
   | 'JInputPop'

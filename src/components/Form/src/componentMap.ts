@@ -56,6 +56,7 @@ import JPopup from './jeecg/components/JPopup.vue';
 import JPopupDict from './jeecg/components/JPopupDict.vue';
 // update-end--author:liaozhiyang---date:20240130---for：【QQYUN-7961】popupDict字典
 import JSwitch from './jeecg/components/JSwitch.vue';
+import ZlSwitch from './jeecg/components/ZlSwitch.vue';
 import JTreeDict from './jeecg/components/JTreeDict.vue';
 import JInputPop from './jeecg/components/JInputPop.vue';
 // import { JEasyCron } from './jeecg/components/JEasyCron';
@@ -144,6 +145,7 @@ componentMap.set('JPopup', JPopup);
 componentMap.set('JPopupDict', JPopupDict);
 // update-end--author:liaozhiyang---date:20240130---for：【QQYUN-7961】popupDict字典
 componentMap.set('JSwitch', JSwitch);
+componentMap.set('ZlSwitch', ZlSwitch);
 componentMap.set('JTreeDict', JTreeDict);
 componentMap.set('JInputPop', JInputPop);
 componentMap.set(

@@ -29,6 +29,8 @@ export const APP_LOCAL_CACHE_KEY = 'COMMON__LOCAL__KEY__';
 export const APP_SESSION_CACHE_KEY = 'COMMON__SESSION__KEY__';
 // 租户 key
 export const TENANT_ID = 'TENANT_ID';
+//服务器 key
+export const SERVER_ID = 'SERVER_ID';
 // login info key
 export const LOGIN_INFO_KEY = 'LOGIN__INFO__';
 

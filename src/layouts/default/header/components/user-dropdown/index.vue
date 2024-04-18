@@ -14,6 +14,7 @@
         <MenuItem action="account" :text="t('layout.header.dropdownItemSwitchAccount')" icon="ant-design:setting-outlined" />
         <MenuItem action="password" :text="t('layout.header.dropdownItemSwitchPassword')" icon="ant-design:edit-outlined" />
         <MenuItem action="depart" :text="t('layout.header.dropdownItemSwitchDepart')" icon="ant-design:cluster-outlined" />
+        <MenuItem action="server" :text="t('layout.header.dropdownItemSwitchServer')" icon="ant-design:cloud-outlined" />
         <MenuItem action="sysCache" :text="t('layout.header.dropdownItemRefreshSysCache')" icon="ion:sync-outline" />
         <MenuItem action="appCache" :text="t('layout.header.dropdownItemRefreshAppCache')" icon="ion:sync-outline" />
         <MenuItem v-if="getUseLockPage" action="lock" :text="t('layout.header.tooltipLock')" icon="ion:lock-closed-outline" />
@@ -24,6 +25,7 @@
   </Dropdown>
   <LockAction v-if="lockActionVisible" ref="lockActionRef" @register="register" />
   <DepartSelect ref="loginSelectRef" />
+  <ServerSelect ref="serverSelectRef" />
   <UpdatePassword v-if="passwordVisible" ref="updatePasswordRef" />
 </template>
 <script lang="ts">
@@ -53,7 +55,7 @@
   import { getFileAccessHttpUrl } from '/@/utils/common/compUtils';
   import { getRefPromise } from '/@/utils/index';
 
-  type MenuEvent = 'logout' | 'doc' | 'lock' | 'sysCache' |'appCache' | 'depart'|'password'|'account';
+  type MenuEvent = 'logout' | 'doc' | 'lock' | 'sysCache' |'appCache' | 'depart'|'server'|'password'|'account';
   const { createMessage } = useMessage();
   export default defineComponent({
     name: 'UserDropdown',
@@ -64,6 +66,7 @@
       MenuDivider: Menu.Divider,
       LockAction: createAsyncComponent(() => import('../lock/LockModal.vue')),
       DepartSelect: createAsyncComponent(() => import('./DepartSelect.vue')),
+      ServerSelect: createAsyncComponent(() => import('./ServerSelect.vue')),
       UpdatePassword: createAsyncComponent(() => import('./UpdatePassword.vue')),
     },
     props: {
@@ -98,6 +101,7 @@
        * 多部门弹窗逻辑
        */
       const loginSelectRef = ref();
+      const serverSelectRef = ref();
       async function handleLock() {
         lockActionVisible.value = true;
         await getRefPromise(lockActionRef);
@@ -138,6 +142,10 @@
       function updateCurrentDepart() {
         loginSelectRef.value.show();
       }
+      // 切换服务器
+      function updateCurrentServer() {
+        serverSelectRef.value.show();
+      }
       // 修改密码
       const updatePasswordRef = ref();
       async function updatePassword() {
@@ -165,6 +173,9 @@
           case 'depart':
             updateCurrentDepart();
             break;
+          case 'server':
+            updateCurrentServer();
+            break;
           case 'password':
             updatePassword();
             break;
@@ -184,6 +195,7 @@
         register,
         getUseLockPage,
         loginSelectRef,
+        serverSelectRef,
         updatePasswordRef,
         passwordVisible,
         lockActionVisible,

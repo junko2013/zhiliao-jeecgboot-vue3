@@ -14,6 +14,11 @@
       <span v-if="getShowContent && getShowBreadTitle && !getIsMobile" :class="[prefixCls, `${prefixCls}--${getHeaderTheme}`,'headerIntroductionClass']">
         {{t('layout.header.currentTenant')}} <b>[{{ loginTenantName }}]</b>
       </span>
+      /
+      <!-- 当前服务器 -->
+      <span v-if="getShowContent && getShowBreadTitle && !getIsMobile" :class="[prefixCls, `${prefixCls}--${getHeaderTheme}`,'headerIntroductionClass']">
+        {{t('layout.header.currentServer')}} <b>[{{ currentServer }}]</b>
+      </span>
     </div>
     <!-- left end -->
 
@@ -77,7 +82,7 @@
   import { useUserStore } from '/@/store/modules/user';
   import { useI18n } from '/@/hooks/web/useI18n';
   import Aide from "@/views/dashboard/ai/components/aide/index.vue"
-  import { getLoginTenantName } from "@/views/system/tenant/tenant.api";
+  import { getLoginTenantName,getCurrentServer } from "@/views/system/tenant/tenant.api";
   const { t } = useI18n();
 
   export default defineComponent({
@@ -188,11 +193,17 @@
       }
 
       const loginTenantName = ref<string>('');
+      const currentServer = ref<string>('');
 
       getTenantName();
 
       async function getTenantName(){
         loginTenantName.value = await getLoginTenantName();
+      }
+      getCurrServer();
+
+      async function getCurrServer(){
+        currentServer.value = await getCurrentServer();
       }
 
       onMounted(() => {
@@ -227,6 +238,7 @@
         loginSelectRef,
         title,
         loginTenantName,
+        currentServer,
         t
       };
     },

@@ -1,7 +1,6 @@
 import { Persistent, BasicKeys } from '/@/utils/cache/persistent';
-import { CacheTypeEnum } from '/@/enums/cacheEnum';
 import projectSetting from '/@/settings/projectSetting';
-import { TOKEN_KEY, LOGIN_INFO_KEY, TENANT_ID } from '/@/enums/cacheEnum';
+import { TOKEN_KEY, LOGIN_INFO_KEY, TENANT_ID,CacheTypeEnum, SERVER_ID } from '/@/enums/cacheEnum';
 
 const { permissionCacheType } = projectSetting;
 const isLocal = permissionCacheType === CacheTypeEnum.LOCAL;
@@ -23,6 +22,12 @@ export function getLoginBackInfo() {
  */
 export function getTenantId() {
   return getAuthCache<string>(TENANT_ID);
+}
+/**
+ * 获取服务器id
+ */
+export function getServerId() {
+  return getAuthCache<string>(SERVER_ID);
 }
 
 export function getAuthCache<T>(key: BasicKeys) {

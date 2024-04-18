@@ -1,12 +1,13 @@
 import { defHttp } from '/@/utils/http/axios';
 import { Modal } from 'ant-design-vue';
-import { getTenantId } from "/@/utils/auth";
+import { getServerId, getTenantId } from "/@/utils/auth";
 
 enum Api {
   list = '/sys/tenant/list',
   save = '/sys/tenant/add',
   edit = '/sys/tenant/edit',
   get = '/sys/tenant/queryById',
+  getServer = '/sys/server/queryById',
   delete = '/sys/tenant/delete',
   deleteBatch = '/sys/tenant/deleteBatch',
   getCurrentUserTenants = '/sys/tenant/getCurrentUserTenant',
@@ -26,7 +27,7 @@ enum Api {
   addTenantPackUser = '/sys/tenant/addTenantPackUser',
   //获取用户租户列表
   getTenantPageListByUserId = '/sys/tenant/getTenantPageListByUserId',
-  
+
   //新增、编辑用户租户
   saveUser = '/sys/user/add',
   editUser = '/sys/user/editTenantUser',
@@ -229,6 +230,20 @@ export async function getLoginTenantName() {
     if(result){
       return result.name;
     }
+  }
+  return "空";
+}
+/**
+ * 获取当前服务器
+ */
+export async function getCurrentServer() {
+  let serverId = getServerId();
+  if(serverId){
+    // let result = await getServerById({ id:serverId });
+    // if(result){
+    //   return result.name;
+    // }
+    return "fucking server";
   }
   return "空";
 }
